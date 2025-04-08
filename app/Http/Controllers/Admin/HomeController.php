@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function index(){
-        $user = Auth::guard('admin')->user();
-        // return $user->name . "<a href=".route('admin.logout').">logout</a>";
 
-        return "dashboar";
+        return view('admin.dashboard');
+        // $user = Auth::guard('admin')->user();
+        // return $user->name . "<a href=".route('admin.logout').">logout</a>";
     }
 
 
