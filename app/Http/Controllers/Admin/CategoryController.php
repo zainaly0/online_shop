@@ -70,6 +70,11 @@ class CategoryController extends Controller
 
 
     public function categorySearch(Request $request){
-        Category::where('name', $reqeust->name)->
+        $category = Category::where('name','like', "%{$request->name}%")->get();
+        
+        return response()->json([
+            'status' => true,
+            'data' => $category,
+        ]);
     }
 }

@@ -24,7 +24,7 @@
             <div class="card-header">
                 <div class="card-tools">
                     <div class="input-group input-group" style="width: 250px;">
-                       <form action="" method="post" id="caretorySearchFrom" name="caretorySearchFrom">
+                       <form action="" method="post" name="caretorySearchFrom">
                         <input type="text" name="caretorySearchFrom" id="caretorySearchFrom" class="form-control float-right" placeholder="Search">
                        </form>
 
@@ -109,9 +109,26 @@
 <script>
 
     $("#caretorySearchFrom").on('keyup', function(){
+        var element = $(this);
+        var searchElement = element.val();
+
+       if(searchElement.length > 2){
         $.ajax({
-            url: 
+            url: '{{route('category.search')}}',
+            method:'get',
+            data: {
+                name: element.val()
+            },
+            success: function(response){
+               if(response.data.length > 0){
+
+               }
+            },
+            error: function(jqXHR, exception){
+                console.log('error')
+            }
         })
+       }
     })
 
 </script>
