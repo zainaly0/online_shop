@@ -21,21 +21,29 @@
     <!-- Default box -->
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header">
-                <div class="card-tools">
-                    <div class="input-group input-group" style="width: 250px;">
-                       <form action="" method="post" name="caretorySearchFrom">
-                        <input type="text" name="caretorySearchFrom" id="caretorySearchFrom" class="form-control float-right" placeholder="Search">
-                       </form>
+            <form action="" method="get">
+                <div class="card-header">
 
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <div class="card-title">
+                        <button type="button" onclick="window.location.href='{{url(route('categories.index'))}}'" class="btn btn-default btn-sm">
+                            Reset
+                        </button>
+
+                        {{-- <a href="{{route('categories.index')}}" class="btn btn-default btn-sm">Reset</a> --}}
+                    </div>
+
+                    <div class="card-tools">
+                        <div class="input-group input-group" style="width: 250px;">
+                            <input type="text" name="keyword" id="keyword" class="form-control float-right" placeholder="Search" value="{{Request::get('keyword')}}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
@@ -66,7 +74,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </td>
-                                
+
                             @endif
                             <td>
                                 <a href="#">
@@ -107,29 +115,28 @@
 @section('customJs')
 
 <script>
+    // $("#caretorySearchFrom").on('keyup', function(){
+    //     var element = $(this);
+    //     var searchElement = element.val();
 
-    $("#caretorySearchFrom").on('keyup', function(){
-        var element = $(this);
-        var searchElement = element.val();
+    //    if(searchElement.length > 2){
+    //     $.ajax({
+    //         url: '{{route('category.search')}}',
+    //         method:'get',
+    //         data: {
+    //             name: element.val()
+    //         },
+    //         success: function(response){
+    //            if(response.data.length > 0){
 
-       if(searchElement.length > 2){
-        $.ajax({
-            url: '{{route('category.search')}}',
-            method:'get',
-            data: {
-                name: element.val()
-            },
-            success: function(response){
-               if(response.data.length > 0){
-
-               }
-            },
-            error: function(jqXHR, exception){
-                console.log('error')
-            }
-        })
-       }
-    })
+    //            }
+    //         },
+    //         error: function(jqXHR, exception){
+    //             console.log('error')
+    //         }
+    //     })
+    //    }
+    // })
 
 </script>
 
