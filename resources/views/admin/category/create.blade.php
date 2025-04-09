@@ -66,7 +66,7 @@
     $('#categoryForm').submit(function(event) {
         event.preventDefault();
         var element = $(this);
-
+        $('button[type=submit]').prop('disabled', true);
         $.ajax({
             url: '{{ route("categories.store") }}'
             , type: 'post'
@@ -74,6 +74,8 @@
             , dataType: 'json'
             , success: function(response) {
                 if (response["status"] === true) {
+                    $('button[type=submit]').prop('disabled', false);
+                    window.location.href= "{{route('categories.index')}}"
                     $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                     $('#slug').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                 } else {
@@ -97,6 +99,7 @@
     $('#name').on('keyup',function() {
         console.log('zaid')
         var element = $(this); 
+        $('button[type=submit]').prop('disabled', true)
         $.ajax({
             url: '{{route("getSlug")}}'
             , method: 'get'
@@ -104,6 +107,7 @@
                 title: element.val()
             }
             , success: function(response) {
+                $('button[type=submit]').prop('disabled', false)
                 $('#slug').val(response.slug)
             }
             , error: function(jqXHR, exception) {
