@@ -9,7 +9,7 @@
                 <h1>Create Category</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="categories.html" class="btn btn-primary">Back</a>
+                <a href="{{route('categories.index')}}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
 <section class="content">
     <!-- Default box -->
     <div class="container-fluid">
-
+        @include('admin.message')
         <form action="" method="post" id="categoryForm" name="categoryForm">
 
             <div class="card">
@@ -29,18 +29,20 @@
                             <div class="mb-3">
                                 <label for="name">Name</label>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                <p></p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="slug">Slug</label>
-                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug">
+                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" readonly>
+                                <p></p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email" for="status">Status</label>
-                                <select name="" id="status" name="status" class="form-control">
+                                <select name="status" id="status" name="status" class="form-control">
                                     <option value="1">Active</option>
                                     <option value="0">Block</option>
                                 </select>
@@ -61,30 +63,54 @@
 @endsection
 @section('customJs')
 <script>
-
-    $.ajaxSetup({
-        headers:{
-            'X-CSRF-TOKEN': $();
-        }
-    })
-
-
-    $("#categoryForm").submit(function(event)) {
+    $('#categoryForm').submit(function(event) {
         event.preventDefault();
-        var element  = $(this);
-        $.ajax({
-            url: '{{route("categories.store")}}',
-            type: 'post',
-            data: element.serializeArray(),
-            dataType: 'json',
-            success: function(response) {
+        var element = $(this);
 
-            },
-            error: function(jqXHR, exception) {
-                console.log('something went wrong');
+        $.ajax({
+            url: '{{ route("categories.store") }}'
+            , type: 'post'
+            , data: element.serializeArray()
+            , dataType: 'json'
+            , success: function(response) {
+                if (response["status"] === true) {
+                    $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
+                    $('#slug').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
+                } else {
+                    var errors = response['errors'];
+                    if (errors['name']) {
+                        $('#name').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['name']);
+                    }
+                    if (errors['slug']) {
+                        $('#slug').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['slug']);
+                    }
+                }
+            }
+            , error: function(jqXHR, exception) {
+                console.log('AJAX error:', exception);
+            }
+        });
+    });
+
+
+
+    $('#name').on('keyup',function() {
+        console.log('zaid')
+        var element = $(this); 
+        $.ajax({
+            url: '{{route("getSlug")}}'
+            , method: 'get'
+            , data: {
+                title: element.val()
+            }
+            , success: function(response) {
+                $('#slug').val(response.slug)
+            }
+            , error: function(jqXHR, exception) {
+                console.log('error')
             }
         })
-    }
+    })
 
 </script>
 
