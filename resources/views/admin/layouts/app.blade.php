@@ -62,10 +62,11 @@
         <!-- Main Sidebar Container -->
        @include('admin.layouts.sidebar')
         <!-- Content Wrapper. Contains page content -->
-       @yield('content')
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-
             <strong>Copyright &copy; 2014-2022 AmazingShop All rights reserved.
         </footer>
 

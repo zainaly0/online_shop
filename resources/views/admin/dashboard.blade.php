@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="content-wrapper">
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
@@ -63,14 +63,11 @@
         </div>
         <!-- /.card -->
     </section>
-    <!-- /.content -->
-</div>
+    <!-- /.content --> 
 @endsection
 @section('customJs')
 <script>
-    console.log('zaid');
-    alert('zaid')
-
+    
 </script>
 
 @endsection
