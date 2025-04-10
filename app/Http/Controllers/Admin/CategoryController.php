@@ -46,11 +46,12 @@ class CategoryController extends Controller
         // return redirect()->back()->withErrors($validator)->withInput();
 
         if ($validator->passes()) {
-            Category::create([
-                'name' => $request->name,
-                'slug' => Str::slug($request->name),
-                'status' => $request->status,
-            ]);
+            $category = new Category();
+            $category->name = $request->name;
+            $category->slug = $request->slug;
+            $category->status = $request->status;
+            $category->save();
+            
 
             $request->session()->flash('success', 'Category added successfully');
 
