@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\Category;
+use App\Models\TempImage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -49,9 +52,26 @@ class CategoryController extends Controller
             $category = new Category();
             $category->name = $request->name;
             $category->slug = $request->slug;
-            $category->status = $request->status;
+            $category->status = $request->status; 
             $category->save();
+
+            if(!empty($request->image_id)){
+                $tempImage = TempImage::find($request->image_id);
+                $extArray = explode('.', $tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = (string) $category->id. '.' .$ext;
+                $sPath = public_path() . '/temp/' . $tempImage->name;
+                $dPath = public_path() . '/uploads/category/' . $newImageName;
+                Log::info('public destination path ' . $dPath );
+                if(File::exists($sPath)){
+                    File::copy($sPath, $dPath);
+                }
+                $category->image = $newImageName;
+                $category->save();
+            }
             
+
 
             $request->session()->flash('success', 'Category added successfully');
 
