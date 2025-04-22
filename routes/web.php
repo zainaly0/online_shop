@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\HomeController;
@@ -45,6 +46,15 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+
+        //sub category routes
+        Route::get('/sub-categories/create', [SubCategoryController::class, 'create'])->name('sub-categories.create');
+        Route::post('/sub-categories/store', [SubCategoryController::class, 'store'])->name('sub-categories.store');
+        Route::get('/sub-categories', [SubCategoryController::class, 'index'])->name('sub-categories.index');
+        Route::get('/sub-categories/{subcategory}/edit', [SubCategoryController::class, 'edit'])->name('sub-categories.edit');
+        Route::put('/sub-categories/{subCategory}', [SubCategoryController::class, 'update'])->name('sub-categories.update');
+        Route::delete('/sub-categories/{subCategory}', [SubCategoryController::class, 'destroy'])->name('sub-categories.destroy');
 
 
 

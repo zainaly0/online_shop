@@ -197,7 +197,7 @@ class CategoryController extends Controller
 
         $request->session()->flash('success','Category deleted successfully');
 
-        return redirect()->json([
+        return response()->json([
             'status' => true,
             'message' => "category deleted successfully",
         ]);
