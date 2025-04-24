@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TempImagesController;
@@ -56,6 +57,15 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/sub-categories/{subCategory}', [SubCategoryController::class, 'update'])->name('sub-categories.update');
         Route::delete('/sub-categories/{subCategory}', [SubCategoryController::class, 'destroy'])->name('sub-categories.destroy');
 
+        // brand routes
+        Route::get('brand/create', [BrandController::class, 'create'])->name('brand.create');
+        Route::post('/brand/store', [BrandController::class, 'store'])->name('brand.store');
+        Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+        Route::get('/brand/{brand}/edit', [BrandController::class, 'edit'])->name('brand.edit');
+        Route::put('/brand/{brand}', [BrandController::class, 'update'])->name('brand.update');
+        Route::delete('/brand/{brand}', [BrandController::class, 'destroy'])->name('brand.destroy');
+
+        
 
 
         Route::get('/getSlug', function(Request $request){
