@@ -149,7 +149,7 @@
                         <div class="card-body">
                             <h2 class="h4 mb-3">Product brand</h2>
                             <div class="mb-3">
-                                <select name="brand" id="status" class="form-control">
+                                <select name="brand" id="brand" class="form-control">
                                     <option value="">Select a Brand</option>
                                     @if($brands->isNotEmpty())
                                     @foreach ($brands as $brand)
@@ -164,7 +164,7 @@
                         <div class="card-body">
                             <h2 class="h4 mb-3">Featured product</h2>
                             <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
+                                <select name="is_featured" id="is_featured" class="form-control">
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -175,7 +175,7 @@
             </div>
 
             <div class="pb-5 pt-3">
-                <button class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-primary">Create</button>
                 <a href="products.html" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </div>
@@ -205,6 +205,7 @@
             , success: function(response) {
                 if (response['status'] == true) {
                     $('#slug').val(response.slug)
+                    $('button[type=submit]').prop('disabled', false);
                 }
 
             }
@@ -218,12 +219,12 @@
 
     $('#productForm').submit(function(event) {
         event.preventDefault();
-        var element = $(this);
+        var formArray = $(this).serializeArray();
 
         $.ajax({
             url: "{{route('product.store')}}"
             , method: 'post'
-            , data: element.serializeArray()
+            , data: formArray
             , dataType: 'json'
             , success: function(response) {
                 console.log(response)
