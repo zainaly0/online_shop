@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductSubCategoryController;
 use App\Http\Controllers\Admin\TempImagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -66,6 +68,15 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/brand/{brand}', [BrandController::class, 'destroy'])->name('brand.destroy');
 
         
+        // products routes
+        Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
+        // Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+        // Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        // Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
+        // Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+
+        Route::get('/product/sub-categories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.find');
 
 
         Route::get('/getSlug', function(Request $request){

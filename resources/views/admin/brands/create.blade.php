@@ -116,8 +116,8 @@
             title: element.val()
         },
         success: function(response){
-            $('#button[type=submit]').prop('disabled', false)
             $('#slug').val(response.slug) 
+            $('#button[type=submit]').prop('disabled', false)
         },
         error: function(jqXHR, exception){
             console.log('error')
