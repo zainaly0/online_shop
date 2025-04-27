@@ -30,12 +30,15 @@
                                     <div class="mb-3">
                                         <label for="title">Title</label>
                                         <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+                                        <p class="error"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="slug">Slug</label>
                                         <input type="text" name="slug" id="slug" class="form-control" placeholder="slug" readonly>
+                                        <p class="error"></p>
+
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -65,6 +68,8 @@
                                     <div class="mb-3">
                                         <label for="price">Price</label>
                                         <input type="text" name="price" id="price" class="form-control" placeholder="Price">
+                                        <p class="error"></p>
+
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -87,6 +92,8 @@
                                     <div class="mb-3">
                                         <label for="sku">SKU (Stock Keeping Unit)</label>
                                         <input type="text" name="sku" id="sku" class="form-control" placeholder="sku">
+                                        <p class="error"></p>
+
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -98,8 +105,11 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" id="track_qty" name="track_qty" checked>
+                                            <input type="hidden" name="track_qty" value="No">
+                                            <input class="custom-control-input" type="checkbox" id="track_qty" name="track_qty" value="Yes" checked>
                                             <label for="track_qty" class="custom-control-label">Track Quantity</label>
+                                            <p class="error"></p>
+
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -135,12 +145,14 @@
                                     @endforeach
                                     @endif
                                 </select>
+                                <p class="error"></p>
+
                             </div>
                             <div class="mb-3">
                                 <label for="category">Sub category</label>
                                 <select name="sub_category" id="sub_category" class="form-control">
                                     <option value="">Select a Sub Category</option>
-                                    
+
                                 </select>
                             </div>
                         </div>
@@ -165,9 +177,11 @@
                             <h2 class="h4 mb-3">Featured product</h2>
                             <div class="mb-3">
                                 <select name="is_featured" id="is_featured" class="form-control">
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
                                 </select>
+                                <p class="error"></p>
+
                             </div>
                         </div>
                     </div>
@@ -227,7 +241,89 @@
             , data: formArray
             , dataType: 'json'
             , success: function(response) {
-                console.log(response)
+                if (response['status'] == true) {
+
+                } else {
+                    var errors = response['errors']
+                    console.log(errors['title'])
+                    if (errors['title']) {
+                        $('#title').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['title']);
+                    } else {
+                        $('#title').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                    if (errors['slug']) {
+                        $('#slug').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['slug']);
+                    } else {
+                        $('#slug').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                    if (errors['price']) {
+                        $('#price').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['price']);
+                    } else {
+                        $('#price').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                    if (errors['sku']) {
+                        $('#sku').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['sku']);
+                    } else {
+                        $('#sku').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                    if (errors['is_featured']) {
+                        $('#is_featured').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['is_featured']);
+                    } else {
+                        $('#is_featured').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                    if (errors['category_id']) {
+                        $('#category_id').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['category_id']);
+                    } else {
+                        $('#category_id').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                    if (errors['qty']) {
+                        $('#qty').addClass('is-invalid')
+                            .siblings('p')
+                            .addClass('invalid-feedback')
+                            .html(errors['qty']);
+                    } else {
+                        $('#qty').removeClass('is-invalid')
+                            .siblings('p')
+                            .removeClass('invalid-feedback')
+                            .html()
+                    }
+                }
             }
             , error: function() {
                 console.log('error')
@@ -236,37 +332,35 @@
 
     })
 
-    $('#category').on('change',  function(){
+    $('#category').on('change', function() {
         var categoryID = $(this).val();
-        if(categoryID){
+        if (categoryID) {
             $.ajax({
-                url: "{{route('product-subcategories.find')}}",
-                method: 'get',
-                data: {
-                    id: categoryID,
-                },
-                dataType: 'json',
-                success: function(response){
+                url: "{{route('product-subcategories.find')}}"
+                , method: 'get'
+                , data: {
+                    id: categoryID
+                , }
+                , dataType: 'json'
+                , success: function(response) {
                     $('#sub_category').empty();
                     $('#sub_category').append('<option value="">Select a Sub Category</option>')
 
                     // $('#sub_category').find('option').not(':first').remove();    // above two lines alternative
 
-                    $.each(response['subcategory'], function(key, item){
+                    $.each(response['subcategory'], function(key, item) {
                         // $('#sub_category').append("<option value="+item.id+">"+ item.name + "</option>")
                         $('#sub_category').append(`<option value=${item.id}> ${item.name} </option>`)
                         console.log(item.name);
                     })
-                },
-                error: function(jqXHR, exception){
+                }
+                , error: function(jqXHR, exception) {
                     console.log('error');
                 }
             })
         }
 
     })
-
-
 
 </script>
 
