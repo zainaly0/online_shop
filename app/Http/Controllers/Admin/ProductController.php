@@ -28,9 +28,9 @@ class ProductController extends Controller
     {
         $rules = [
             'title' => 'required',
-            'slug' => 'required',
+            'slug' => 'required|unique:products',
             'price' => 'required',
-            'sku' => 'required',
+            'sku' => 'required|unique:products',
             'track_qty' => 'required|in:Yes,No',
             'is_featured' => 'required|in:Yes,No',
             'category' => 'required|exists:categories,id',
@@ -50,11 +50,32 @@ class ProductController extends Controller
             ]);
         }
 
-        
+        if($validator->passes()){
+            $product = new Product();
+            $product->title = $request->title;
+            $product->slug = $request->slug;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->compare_price = $request->compare_price;
+            $product->sku = $request->sku;
+            $product->barcode = $request->barcode;
+            $product->track_qty = $request->track_qty;
+            $product->qty = $request->qty;
+            $product->status = $request->status;
+            $product->category_id = $request->category;
+            $product->sub_category_id = $request->sub_category;
+            $product->brand_id = $request->brand;
+            $product->is_featured = $request->is_featured;
+            $product->save();
 
+            $request->session()->flash('success', 'Product create successfully');
 
+            return response()->json([
+                'status' => true,
+                'message' => 'Product create successfully',
+            ]);
 
-
+        }
 
     }
 }

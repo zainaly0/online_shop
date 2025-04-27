@@ -235,6 +235,7 @@
     $('#productForm').submit(function(event) {
         event.preventDefault();
         var formArray = $(this).serializeArray();
+        $("button[type='submit']").prop('disabled', true)
 
         $.ajax({
             url: "{{route('product.store')}}"
@@ -242,6 +243,9 @@
             , data: formArray
             , dataType: 'json'
             , success: function(response) {
+                $("button[type='submit']").prop('disabled', false)
+
+
                 if (response['status'] == true) {
 
                 } else {
@@ -260,7 +264,7 @@
                     // }
 
                     $('.class').removeClass('invalid-feedback').html('')
-                    $("input[type='text'], select").removeClass('is-invalid')
+                    $("input[type='text'], select, input[type='number']").removeClass('is-invalid')
                     $.each(errors, function(key, value){
                         $(`#${key}`).addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(`${value}`)
                     });
