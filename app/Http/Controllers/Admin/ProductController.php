@@ -33,7 +33,7 @@ class ProductController extends Controller
             'sku' => 'required',
             'track_qty' => 'required|in:Yes,No',
             'is_featured' => 'required|in:Yes,No',
-            'category_id' => 'required|exists:categories,id',
+            'category' => 'required|exists:categories,id',
             'sub_category' => 'nullable|exists:sub_categories,id',
             'brand' => 'nullable|exists:brands,id',
         ];

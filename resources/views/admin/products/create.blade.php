@@ -114,6 +114,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty">
+                                        <p class="error"></p>
                                     </div>
                                 </div>
                             </div>
@@ -246,83 +247,24 @@
                 } else {
                     var errors = response['errors']
                     console.log(errors['title'])
-                    if (errors['title']) {
-                        $('#title').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['title']);
-                    } else {
-                        $('#title').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
-                    if (errors['slug']) {
-                        $('#slug').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['slug']);
-                    } else {
-                        $('#slug').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
-                    if (errors['price']) {
-                        $('#price').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['price']);
-                    } else {
-                        $('#price').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
-                    if (errors['sku']) {
-                        $('#sku').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['sku']);
-                    } else {
-                        $('#sku').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
-                    if (errors['is_featured']) {
-                        $('#is_featured').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['is_featured']);
-                    } else {
-                        $('#is_featured').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
-                    if (errors['category_id']) {
-                        $('#category_id').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['category_id']);
-                    } else {
-                        $('#category_id').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
-                    if (errors['qty']) {
-                        $('#qty').addClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feedback')
-                            .html(errors['qty']);
-                    } else {
-                        $('#qty').removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html()
-                    }
+                    // if (errors['title']) {
+                    //     $('#title').addClass('is-invalid')
+                    //         .siblings('p')
+                    //         .addClass('invalid-feedback')
+                    //         .html(errors['title']);
+                    // } else {
+                    //     $('#title').removeClass('is-invalid')
+                    //         .siblings('p')
+                    //         .removeClass('invalid-feedback')
+                    //         .html()
+                    // }
+
+                    $('.class').removeClass('invalid-feedback').html('')
+                    $("input[type='text'], select").removeClass('is-invalid')
+                    $.each(errors, function(key, value){
+                        $(`#${key}`).addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(`${value}`)
+                    });
+
                 }
             }
             , error: function() {
