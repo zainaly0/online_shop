@@ -17,6 +17,10 @@ use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
+
+    public function index(){
+        
+    }
     public function create()
     {
         $categories = Category::orderBy('name', 'ASC')->get();
