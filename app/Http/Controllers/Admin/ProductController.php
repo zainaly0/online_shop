@@ -18,8 +18,17 @@ use Intervention\Image\Facades\Image;
 class ProductController extends Controller
 {
 
-    public function index(){
-        
+    public function index(Request $request){
+        $products = Product::latest('id')->with('product_images');
+        if($request->keyword){
+            $products->where('title', 'like', '%'. $request->keyword . '%');
+        }
+
+        $products = $products->paginate();
+
+        // dd($products);
+        $data['products'] = $products;
+        return view('admin.products.list', $data);
     }
     public function create()
     {
@@ -101,16 +110,15 @@ class ProductController extends Controller
 
                     // Large Image
                     $sourcePath = public_path(). '/temp/'. $tempImageInfo->name;
-                    $destPath = public_path().'/uploads/product/large/'.$tempImageInfo->name;
+                    $destPath = public_path().'/uploads/product/large/'.$imageName;
                     $image = Image::make($sourcePath);
                     $image->resize(1400, null, function($constraint){
                         $constraint->aspectRatio();
                     });
                     $image->save($destPath);
 
-                    // Small Image
-                    $sourcePath = public_path(). '/temp/'. $tempImageInfo->name;
-                    $destPath = public_path().'/uploads/product/small/'.$tempImageInfo->name;
+                    // Small Image 
+                    $destPath = public_path().'/uploads/product/small/'.$imageName;
                     $image = Image::make($sourcePath);
                     $image->fit(300, 300);
                     $image->save($destPath);
@@ -127,5 +135,23 @@ class ProductController extends Controller
 
         }
 
+    }
+
+
+    public function edit($id, Request $request){
+        $product = Product::find($id);
+        $subCategories = SubCategory::where('category_id', $product->category_id)->get();
+        if(empty($product)){
+            return redirect()->route('product.index');
+        }
+        $categories = Category::orderBy('name', 'ASC')->get();
+        $brands = Brand::orderBy('name', 'ASC')->get();
+
+        $data['brands'] = $brands;
+        $data['categories'] = $categories;
+        $data['product'] = $product;
+        $data['subCategories'] = $subCategories;
+
+        return view('admin.products.edit', $data);
     }
 }
