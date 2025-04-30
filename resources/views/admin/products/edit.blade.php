@@ -60,9 +60,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" id='product-gallery'>
-
+                    <div class="row" id="product-gallery">
+                        @if($productImages->isNotEmpty())
+                            @foreach ($productImages as $productImage)
+                                <div class="col-md-3" id="image-row-{{$productImage->id}}">
+                                    <div class="card">
+                                        <input type="hidden" name="image_array[]" value="{{$productImage->id}}">
+                                        <img src="{{ asset('/uploads/product/small/'.$productImage->image) }}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <a href="javascript:void(0)" onclick="deleteImage({{$productImage->id}})" class="btn btn-danger">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
+                    
                     <div class="card mb-3">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Pricing</h2>
@@ -102,7 +115,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="barcode">Barcode</label>
-                                        <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode"  value="{{$product->barcode}}">
+                                        <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode" value="{{$product->barcode}}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -116,7 +129,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty"  value="{{$product->qty}}">
+                                        <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty" value="{{$product->qty}}">
                                         <p class="error"></p>
                                     </div>
                                 </div>
@@ -130,8 +143,8 @@
                             <h2 class="h4 mb-3">Product status</h2>
                             <div class="mb-3">
                                 <select name="status" id="status" class="form-control">
-                                    <option value="1" {{$product->status == 1 ? 'selected' : ''}} >Active</option>
-                                    <option value="0" {{$product->status == 0 ? 'selected' : ''}} >Block</option>
+                                    <option value="1" {{$product->status == 1 ? 'selected' : ''}}>Active</option>
+                                    <option value="0" {{$product->status == 0 ? 'selected' : ''}}>Block</option>
                                 </select>
                             </div>
                         </div>
@@ -157,12 +170,11 @@
                                 <select name="sub_category" id="sub_category" class="form-control">
                                     <option value="">Select a Sub Category</option>
                                     @if($subCategories->isNotEmpty())
-                                        @foreach ($subCategories as $subcategory)
-                                            <option value="{{ $subcategory->id }}" 
-                                                    {{ $product->sub_category_id == $subcategory->id ? 'selected' : '' }}>
-                                                {{ $subcategory->name }}
-                                            </option>
-                                        @endforeach
+                                    @foreach ($subCategories as $subcategory)
+                                    <option value="{{ $subcategory->id }}" {{ $product->sub_category_id == $subcategory->id ? 'selected' : '' }}>
+                                        {{ $subcategory->name }}
+                                    </option>
+                                    @endforeach
                                     @endif
                                 </select>
                             </div>
@@ -248,8 +260,8 @@
         $("button[type='submit']").prop('disabled', true)
 
         $.ajax({
-            url: "{{route('product.store')}}"
-            , method: 'post'
+            url: "{{route('product.update', $product->id)}}"
+            , method: 'put'
             , data: formArray
             , dataType: 'json'
             , success: function(response) {
@@ -326,19 +338,18 @@
 
     Dropzone.autoDiscover = false;
     const dropzone = $('#image').dropzone({
-        url: "{{route('temp-images.create')}}"
+        url: "{{route('product-images.update')}}"
         , maxFiles: 10
         , paramName: 'image'
+        , params: {
+            'product_id': '{{$product->id}}'
+        }
         , addRemoveFiles: "images/jpeg,image/png,image/gif"
         , headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
         , success: function(file, response) {
             // $("#image_id").val(response.image_id)
-
-
-
-
             var html = `<div class="col-md-3" id="image-row-${response.image_id}">
                 <div class="card">
                     <input type="hidden" name="image_array[]" value="${response.image_id}">
@@ -352,13 +363,36 @@
             $('#product-gallery').append(html)
         },
 
-        complete: function(file){
+        complete: function(file) {
             this.removeFile(file);
         }
     })
 
-    function deleteImage(id){
-    $('#image-row-'+id).remove();
+    function deleteImage(id) {
+        if (confirm('Are you sure you want to delete this?')) {
+            $('#image-row-' + id).remove()
+            $.ajax({
+                url: "{{route('product-images.destroy')}}"
+                , method: 'delete'
+                , data: {
+                    id: id
+                }
+                , success: function(response) {
+                    if (response.status == 'true') {
+                        $('#image-row-'+$id).remove();
+                        console.log($('#image-row-'+$id).remove());
+
+                        alert(response.message);
+
+                    } else {
+                        alert(response.message)
+                    }
+                }
+                , error: function(jqXHR, exception) {
+                    console.log('error')
+                }
+            })
+        }
     }
 
 </script>

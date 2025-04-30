@@ -18,10 +18,11 @@ use Intervention\Image\Facades\Image;
 class ProductController extends Controller
 {
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $products = Product::latest('id')->with('product_images');
-        if($request->keyword){
-            $products->where('title', 'like', '%'. $request->keyword . '%');
+        if ($request->keyword) {
+            $products->where('title', 'like', '%' . $request->keyword . '%');
         }
 
         $products = $products->paginate();
@@ -90,11 +91,11 @@ class ProductController extends Controller
             if (!empty($request->image_array)) {
                 foreach ($request->image_array as $temp_image_id) {
                     $tempImageInfo = TempImage::find($temp_image_id);
-                    Log::info('tempImageInfo: '. $tempImageInfo);
-                    $extArray = explode('.', $tempImageInfo->name); 
+                    Log::info('tempImageInfo: ' . $tempImageInfo);
+                    $extArray = explode('.', $tempImageInfo->name);
 
                     $ext = last($extArray); //return extension jpg,gif,png etc
-                    Log::info('ext: '. $ext);
+                    Log::info('ext: ' . $ext);
 
                     $productImage = new ProductImage();
                     $productImage->product_id = $product->id;
@@ -109,21 +110,20 @@ class ProductController extends Controller
                     // generate Product thumbnails
 
                     // Large Image
-                    $sourcePath = public_path(). '/temp/'. $tempImageInfo->name;
-                    $destPath = public_path().'/uploads/product/large/'.$imageName;
+                    $sourcePath = public_path() . '/temp/' . $tempImageInfo->name;
+                    $destPath = public_path() . '/uploads/product/large/' . $imageName;
                     $image = Image::make($sourcePath);
-                    $image->resize(1400, null, function($constraint){
+                    $image->resize(1400, null, function ($constraint) {
                         $constraint->aspectRatio();
                     });
                     $image->save($destPath);
 
                     // Small Image 
-                    $destPath = public_path().'/uploads/product/small/'.$imageName;
+                    $destPath = public_path() . '/uploads/product/small/' . $imageName;
                     $image = Image::make($sourcePath);
                     $image->fit(300, 300);
                     $image->save($destPath);
                 }
-
             }
 
             $request->session()->flash('success', 'Product create successfully');
@@ -132,18 +132,21 @@ class ProductController extends Controller
                 'status' => true,
                 'message' => 'Product create successfully',
             ]);
-
         }
-
     }
 
 
-    public function edit($id, Request $request){
+    public function edit($id, Request $request)
+    {
         $product = Product::find($id);
-        $subCategories = SubCategory::where('category_id', $product->category_id)->get();
-        if(empty($product)){
+        if (empty($product)) {
+            $request->session()->flash('error', 'Record not found');
             return redirect()->route('product.index');
         }
+
+        //Fetch Product Images 
+        $productImages = ProductImage::where('product_id', $product->id)->get();
+        $subCategories = SubCategory::where('category_id', $product->category_id)->get();
         $categories = Category::orderBy('name', 'ASC')->get();
         $brands = Brand::orderBy('name', 'ASC')->get();
 
@@ -151,7 +154,108 @@ class ProductController extends Controller
         $data['categories'] = $categories;
         $data['product'] = $product;
         $data['subCategories'] = $subCategories;
+        $data['productImages'] = $productImages;
+
 
         return view('admin.products.edit', $data);
+    }
+
+
+    public function update($id, Request $request)
+    {
+
+        $product = Product::find($id);
+        if (empty($product)) {
+            $request->session()->flash('error', 'Record not found');
+            return redirect()->route('product.index');
+        }
+
+        $rules = [
+            'title' => 'required',
+            'slug' => 'required|unique:products,slug,' . $product->id . ',id',
+            'price' => 'required',
+            'sku' => 'required|unique:products,sku,'. $product->id.',sku',
+            'track_qty' => 'required|in:Yes,No',
+            'is_featured' => 'required|in:Yes,No',
+            'category' => 'required|exists:categories,id',
+            'sub_category' => 'nullable|exists:sub_categories,id',
+            'brand' => 'nullable|exists:brands,id',
+        ];
+
+        if (!empty($request->track_qty) && $request->track_qty == 'Yes') {
+            $rules['qty'] = 'required|numeric';
+        }
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        if ($validator->passes()) {
+            $product->title = $request->title;
+            $product->slug = $request->slug;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->compare_price = $request->compare_price;
+            $product->sku = $request->sku;
+            $product->barcode = $request->barcode;
+            $product->track_qty = $request->track_qty;
+            $product->qty = $request->qty;
+            $product->status = $request->status;
+            $product->category_id = $request->category;
+            $product->sub_category_id = $request->sub_category;
+            $product->brand_id = $request->brand;
+            $product->is_featured = $request->is_featured;
+            $product->update();
+
+            // if (!empty($request->image_array)) {
+            //     foreach ($request->image_array as $temp_image_id) {
+            //         $tempImageInfo = TempImage::find($temp_image_id);
+            //         Log::info('tempImageInfo: '. $tempImageInfo);
+            //         $extArray = explode('.', $tempImageInfo->name); 
+
+            //         $ext = last($extArray); //return extension jpg,gif,png etc
+            //         Log::info('ext: '. $ext);
+
+            //         $productImage = new ProductImage();
+            //         $productImage->product_id = $product->id;
+            //         $productImage->image = "NULL";
+            //         $productImage->save();
+
+            //         $imageName = $product->id . '-' . $productImage->id . '-' . time() . '.' . $ext;
+            //         $productImage->image = $imageName;
+            //         $productImage->save();
+
+
+            //         // generate Product thumbnails
+
+            //         // Large Image
+            //         $sourcePath = public_path(). '/temp/'. $tempImageInfo->name;
+            //         $destPath = public_path().'/uploads/product/large/'.$imageName;
+            //         $image = Image::make($sourcePath);
+            //         $image->resize(1400, null, function($constraint){
+            //             $constraint->aspectRatio();
+            //         });
+            //         $image->save($destPath);
+
+            //         // Small Image 
+            //         $destPath = public_path().'/uploads/product/small/'.$imageName;
+            //         $image = Image::make($sourcePath);
+            //         $image->fit(300, 300);
+            //         $image->save($destPath);
+            //     }
+
+            // }
+
+            $request->session()->flash('success', 'Product updated successfully');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Product updated successfully',
+            ]);
+        }
     }
 }
