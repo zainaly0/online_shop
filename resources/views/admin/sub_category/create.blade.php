@@ -48,7 +48,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email">Slug</label>
-                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" readonly>
+                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug">
                                 <p></p>
                             </div>
                         </div>
@@ -60,6 +60,15 @@
                                     <option value="0">Block</option>
                                 </select>
                                 <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" for="showHome">Show on Home</label>
+                                <select name="showHome" id="showHome" name="showHome" class="form-control">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
                             </div>
                         </div>
                     </div>

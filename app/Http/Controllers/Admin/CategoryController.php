@@ -54,6 +54,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status; 
+            $category->showHome = $request->showHome; 
             $category->save();
 
             if(!empty($request->image_id)){
@@ -118,7 +119,7 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'slug' => 'required|unique:categories,slug,$category->id',
+            'slug' => "required|unique:categories,slug,$category->id,id",
             'status' => 'required',
         ]);
 
@@ -134,6 +135,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status; 
+            $category->showHome = $request->showHome;
             $category->update();
 
             $oldImage= $category->image;

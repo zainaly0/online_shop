@@ -39,8 +39,9 @@ class SubCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'required|unique:sub_categories,slug',
-            'category' => 'required',
-            'status' => 'required'
+            'status' => 'required',
+            'showHome' => 'required|in:Yes,No',
+            'category' => 'required'
         ]);
 
         if ($validator->passes()) {
@@ -49,6 +50,7 @@ class SubCategoryController extends Controller
             $subcategory->name = $request->name;
             $subcategory->slug = $request->slug;
             $subcategory->status = $request->status;
+            $subcategory->showHome = $request->showHome;
             $subcategory->category_id = $request->category;
             $subcategory->save();
 
@@ -106,14 +108,16 @@ class SubCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'required|unique:sub_categories,slug,'.$subcategory->id.',id',
+            'status' => 'required',
+            'showHome' => 'required|in:Yes,No',
             'category' => 'required',
-            'status' => 'required'
         ]);
 
         if ($validator->passes()) {
             $subcategory->name = $request->name;
             $subcategory->slug = $request->slug;
             $subcategory->status = $request->status;
+            $subcategory->showHome = $request->showHome;
             $subcategory->category_id = $request->category;
             $subcategory->update();
 

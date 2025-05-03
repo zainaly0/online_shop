@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductSubCategoryController;
 use App\Http\Controllers\Admin\TempImagesController;
+use App\Http\Controllers\FrontController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -25,11 +26,11 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-
+Route::get('/', [FrontController::class, 'index'])->name('home');
 
 
 Route::group(['prefix' => 'admin'], function () {
@@ -75,7 +76,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/product', [ProductController::class, 'index'])->name('product.index');
         Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
-        // Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+        Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
         Route::get('/product/sub-categories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.find');
 

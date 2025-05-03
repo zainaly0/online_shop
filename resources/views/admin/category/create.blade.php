@@ -60,6 +60,15 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" for="showHome">Show on Home</label>
+                                <select name="showHome" id="showHome" name="showHome" class="form-control">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,6 +97,7 @@
                 if (response["status"] === true) {
                     $('button[type=submit]').prop('disabled', false);
                     // window.location.href= "{{route('categories.index')}}"
+                    alert('data enter')
                     $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                     $('#slug').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                 } else {

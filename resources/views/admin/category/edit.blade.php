@@ -67,6 +67,15 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" for="showHome">Show on Home</label>
+                                <select name="showHome" id="showHome" name="showHome" class="form-control">
+                                    <option value="Yes"  {{$category->showHome == "Yes" ? "selected" : ""}}>Yes</option>
+                                    <option value="No"  {{$category->showHome == "No" ? "selected" : ""}}>No</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
