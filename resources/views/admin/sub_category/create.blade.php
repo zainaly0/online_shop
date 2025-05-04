@@ -105,6 +105,7 @@ $('#subCategoryForm').submit(function(event) {
                 if (response["status"] === true) {
                     $('button[type=submit]').prop('disabled', false);
                     window.location.href= "{{route('sub-categories.index')}}"
+                    // alert('data enter')
                     $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                     $('#slug').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                     $('#category').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');

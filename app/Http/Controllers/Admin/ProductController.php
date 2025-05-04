@@ -175,7 +175,7 @@ class ProductController extends Controller
             'title' => 'required',
             'slug' => 'required|unique:products,slug,' . $product->id . ',id',
             'price' => 'required',
-            'sku' => 'required|unique:products,sku,'. $product->id.',sku',
+            'sku' => 'required|unique:products,sku,'. $product->id.',id',
             'track_qty' => 'required|in:Yes,No',
             'is_featured' => 'required|in:Yes,No',
             'category' => 'required|exists:categories,id',

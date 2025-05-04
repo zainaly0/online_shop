@@ -162,14 +162,23 @@
         url: "{{route('temp-images.create')}}",
         maxFiles: 1,
         paramName: 'image',
-        addRemoveFiles: "images/jpeg,image/png,image/gif",
+        addRemoveFiles: "images/jpeg,image/png,image/gif/,image/webp",
         headers:{ 
             'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
         },
         success: function(file, response){
             $("#image_id").val(response.image_id)
-        }
+        },
+        
+        // complete: function(file){
+        //     this.removeFile(file);
+        // }
     })
+
+    
+    function deleteImage(id){
+    $('#image-row-'+id).remove();
+    }
 
 </script>
 

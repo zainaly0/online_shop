@@ -17,7 +17,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
 
-        $categories = Category::latest();
+        $categories = Category::orderBy('name', 'ASC');
 
         if (!empty($request->get('keyword'))) {
             $categories = $categories->where('name', 'like', '%' . $request->get('keyword') . '%');

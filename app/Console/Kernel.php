@@ -4,9 +4,17 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\MakeHelper;
+use App\Console\Commands\GetDbName;
 
 class Kernel extends ConsoleKernel
 {
+
+    protected  $commands = [
+        MakeHelper::class,
+        GetDbName::class,
+    ];
+
     /**
      * Define the application's command schedule.
      */

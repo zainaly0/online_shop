@@ -96,7 +96,7 @@
             , success: function(response) {
                 if (response["status"] === true) {
                     $('button[type=submit]').prop('disabled', false);
-                    // window.location.href= "{{route('categories.index')}}"
+                    window.location.href= "{{route('categories.index')}}"
                     alert('data enter')
                     $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
                     $('#slug').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
