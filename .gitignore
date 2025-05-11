@@ -6,9 +6,7 @@
 /storage/*.key
 /vendor
 /laravel_10_ecomm_templates-main
-/front
-.env
-.env.backup
+/front 
 .env.production
 Homestead.json
 Homestead.yaml
